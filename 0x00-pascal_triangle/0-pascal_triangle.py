@@ -1,16 +1,15 @@
 #!/usr/bin/python3
-"""
-Solving pascal's triangle with O(log n) time complexity
-and O(n) space complexity
-"""
+"""Solving pascal's triangle challenge """
 
 
-def pascal_triangle(n):
-    """
-    Function to create a pascal's triangle
+def pascal_triangle(n: int):
+    """Function to create a pascal's triangle
+
+    Args:
+        n (int): number of rows in the triangle
 
     Returns:
-        a list of list of integers
+        triangle (list): a list of list of integers making up the triangle
 
     """
     triangle: list = []
