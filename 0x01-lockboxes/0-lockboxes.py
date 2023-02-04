@@ -24,17 +24,24 @@ def canUnlockAll(boxes: list) -> bool:
     boxNum = 0
     my_keys = set()
     used_keys = set()
-    while True:
-        if boxNum not in used_keys:
-            curr_box = my_boxes[boxNum]
-            my_keys.update(curr_box.keys)
-            curr_box.visited = True
-            used_keys.add(boxNum)
-        if boxNum in my_keys and boxNum in used_keys:
-            my_keys.discard(boxNum)
-        if len(my_keys) == 0:
-            break
-        boxNum = next(iter(my_keys))
-    visited_boxes = filter(lambda x: x.visited is True, my_boxes)
-    # [print((b.index, b.keys, b.visited)) for b in visited_boxes]
-    return True if len(used_keys) == len(my_boxes) else False
+    try:
+        while True:
+            if boxNum not in used_keys:
+                curr_box = my_boxes[boxNum]
+                if curr_box is None:
+                    my_keys.discard(boxNum)
+                    boxNum = next(iter(my_keys))
+                    continue
+                my_keys.update(curr_box.keys)
+                curr_box.visited = True
+                used_keys.add(boxNum)
+            if boxNum in my_keys and boxNum in used_keys:
+                my_keys.discard(boxNum)
+            if len(my_keys) == 0:
+                break
+            boxNum = next(iter(my_keys))
+        visited_boxes = filter(lambda x: x.visited is True, my_boxes)
+        # [print((b.index, b.keys, b.visited)) for b in visited_boxes]
+        return True if len(used_keys) == len(my_boxes) else False
+    except BaseException:
+        raise
