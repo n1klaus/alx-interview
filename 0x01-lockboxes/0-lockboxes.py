@@ -35,9 +35,6 @@ def canUnlockAll(boxes: list) -> bool:
         if len(my_keys) == 0:
             break
         boxNum = next(iter(my_keys))
-    visited_boxes = filter(
-                    lambda x: x.visited is True,
-                    my_boxes
-                    )
-    [print((b.index, b.keys, b.visited)) for b in visited_boxes]
+    visited_boxes = filter(lambda x: x.visited is True, my_boxes)
+    # [print((b.index, b.keys, b.visited)) for b in visited_boxes]
     return True if len(used_keys) == len(my_boxes) else False
