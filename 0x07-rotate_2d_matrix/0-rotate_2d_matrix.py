@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 """Rotate 2D Matrix"""
 
-from typing import List
 
-
-def rotate_2d_matrix(matrix: List[List[int]]) -> None:
+def rotate_2d_matrix(matrix: list) -> None:
     """Rotates a 2d matrix in-place"""
     # create a temporary reference matrix
     _matrix: list = [row.copy() for row in matrix]
