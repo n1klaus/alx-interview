@@ -17,15 +17,15 @@ def island_perimeter(grid: list):
         return 0
 
     # create our variables
-    row_index: int = 0
-    perimeter: int = 0
-    landed_on_water: bool = False
+    row_index = 0
+    perimeter = 0
+    landed_on_water = False
 
     # Iterate each row
     while row_index < len(grid):
         # Start from first column if not landed on water, 0
         if not landed_on_water:
-            col_index: int = 0
+            col_index = 0
         # Reset the check
         landed_on_water = False
 
