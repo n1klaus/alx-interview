@@ -22,7 +22,17 @@ There is only one island (or nothing).
 # Solution
 - Find the Island (Interconnection of land cells (1) )
     - Get one land cell(1) and connect to other land cells(1) interconnected horizontally (in same row)
-      or vertically (in same column) while adding the total perimeter
+      or vertically (in same column) while calculating the total perimeter
+        - add perimeter for each cell where perimeter = (length of a side) 1 * 4 (all sides)
+        - check if the current cell shares a connection with another cell
+            - if it shares a connection with another cell on its top side (previous row)
+                - subtract the length (1) from the total perimeter
+            - if it shares a connection with another cell on its left side (previous column)
+                - subtract the length (1) from the total perimeter
+            - if it shares a connection with another cell on its bottom side (next row)
+                - subtract the length (1) from the total perimeter
+            - if it shares a connection with another cell on its right side (next column)
+                - subtract the length (1) from the total perimeter
     - return the total perimeter
 - if there is no land cell(1) found, there is no island present
 
