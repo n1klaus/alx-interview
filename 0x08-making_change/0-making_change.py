@@ -19,13 +19,13 @@ def makeChange(coins: list, total: int) -> int:
     coins.sort(reverse=True)
 
     # Create our change count variable
-    count: int = 0
+    count = 0
 
     # print("{0} => {1}".format(coins, total))
     # Iterate the list of denominations to find total change count
     for den in coins:
         if den <= total:
-            change_count: int = (total // den)
+            change_count = (total // den)
             # print("{0} - {1} = {2} \t\t: +{3}"
             #       .format(total,
             #               den * change_count,
