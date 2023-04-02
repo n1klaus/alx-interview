@@ -13,16 +13,20 @@ Your solution’s runtime will be evaluated in this task
 
 ## Requirements & Contraints
 - Return fewest number of coins to meet total
-- Iterate through the coins list to evaluate for each of the denomination
+- Iterate through the coins list to evaluate change for each of the denomination
 
 ## Solution
 - sort the coins from largest to the smallest
-- from the first index of the coins list, which is the largest denomination to the smallest
-  denomination evaluate how many coins you can get from the current change, 
+- loop through the coins list from the first index to the last index of the coins list,
+  that is the largest denomination to the smallest denomination
+  and evaluate how many coins you can get from the current change, 
   - if you can get change from the current denomination
         - decrement the current total amount
         - increment the count of change acquired
-  - otherwise if you cannot get change from the current denomination move to the next index
+  - otherwise if you cannot get change from the current denomination move to the next denomination
 - return -1 if the total is not exhausted, i.e equal to 0
 - otherwise return collected change count
+
+Time Complexity => O(nlogn)
+Space Complexity => O(1)
 

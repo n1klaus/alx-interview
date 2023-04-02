@@ -12,8 +12,11 @@ def makeChange(coins: list, total: int) -> int:
     """
     # Check if the coins list is None or empty or
     # the total change amount is equal to or less than 0
-    if not isinstance(coins, list) or len(coins) == 0 or total <= 0:
+    if not isinstance(coins, list) or total <= 0:
         return 0
+
+    if len(coins) == 0:
+        return -1
 
     # sort the denomination from the largest to the smallest in place
     coins.sort(reverse=True)
