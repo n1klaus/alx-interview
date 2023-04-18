@@ -62,5 +62,5 @@ def canUnlockAll(boxes: list) -> bool:
             boxIndex = next(iter(usable_keys))
     except StopIteration:
         pass
-    [print((b.index, b.keys, b.visited)) for b in my_boxes]
+    # [print((b.index, b.keys, b.visited)) for b in my_boxes]
     return True if len(used_keys) == len(my_boxes) else False
