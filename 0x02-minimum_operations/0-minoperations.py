@@ -1,51 +1,52 @@
 #!/usr/bin/python3
 """Calculates minimum possible operations on a text file"""
 
-def prime_divisor(n: int) -> int:
-	"""
-	Args:
-		n (int): number to check
-	Returns:
-		d (int): the largest prime divisor of n
-	"""
-	d = 2
-	divisors = []
-	isPrime = True
 
-	while d < (n // 2) + 1:
-		if n % d == 0:
-			isPrime = False
-			divisors.append(d)
-		d += 1
+def largest_prime_divisor(n: int) -> int:
+    """
+    Args:
+            n (int): number to get its largest prime divisor
+    Returns:
+            d (int): the largest prime divisor of n
+    """
+    largest_divisor = 1
 
-	if isPrime:
-		return n
+    # Use sieve of erastothenes to get all prime numbers less than
+    # the largest possible divisor of n which is the sqrt(n)
+    # sqrt = int(pow(n, 0.5))
+    divisors = [True for _ in range(n + 1)]
 
-	non_primes = []
-	for i in range(len(divisors)):
-		for k in range(2, divisors[-1] + 1):
-			if k != divisors[i] and divisors[i] % k == 0:
-				non_primes.append(divisors[i])
-	
-	if len(non_primes) > 1:
-		j = divisors.index(non_primes[0]) - 1
-		return divisors[j]
-	return divisors[-1]
+    num = 2
+    while (num * num) < (n + 1):
+        if divisors[num] is True:
+            for i in range(num * num, n + 1, num):
+                divisors[i] = False
+        num += 1
+
+    # Get the largest prime number which is a divisor of n
+    num = 2
+    while (num * num) < (n + 1):
+        if divisors[num] is True and n % num == 0:
+            largest_divisor = num
+        num += 1
+    return largest_divisor
+
 
 def minOperations(n: int) -> int:
-	"""
-	Args:
-		n (int): desired final number of characters
-	Returns:
-		x (int): the minimum possible `Copy All` and `Paste` operations
-			 on  asingle character `H` in  a text file
-	"""
-	if n <= 1:
-		return 0
-	elif n == 2:
-		return 2
-	else:
-		p = prime_divisor(n)
-		if p == n:
-			return n
-		return p + (n // p)
+    """
+    Args:
+            n (int): desired final number of characters
+    Returns:
+            (int): the minimum possible `Copy All` and `Paste` operations
+                     on a single character `H` in  a text file
+                     to give n characters
+    """
+    if n <= 1:
+        return 0
+    elif n == 2:
+        return 2
+    else:
+        p = largest_prime_divisor(n)
+        if p == n:
+            return n
+        return p + (n // p)
