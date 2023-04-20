@@ -58,7 +58,7 @@ if __name__ == "__main__":
                 print_stats(file_size, status_codes)
     except (KeyboardInterrupt, EOFError):
         # stdout.write("KeyboardInterrupt | EOFError Error\n")
-        print_stats(file_size, status_codes)
         EXIT_CODE = 2
     finally:
+        print_stats(file_size, status_codes)
         exit(EXIT_CODE)
