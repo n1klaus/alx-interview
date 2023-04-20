@@ -2,34 +2,26 @@
 """Calculates minimum possible operations on a text file"""
 
 
-def largest_prime_divisor(n: int) -> int:
+def min_divisor(n: int) -> int:
     """
     Args:
-            n (int): number to get its largest prime divisor
+            n (int): number to get the smallest sum of two of its divisors
     Returns:
-            d (int): the largest prime divisor of n
+            (int): the smallest sum from two divisors of n
+                     which give n as a product
     """
-    largest_divisor = 1
-
-    # Use sieve of erastothenes to get all prime numbers less than
-    # the largest possible divisor of n which is the sqrt(n)
-    # sqrt = int(pow(n, 0.5))
-    divisors = [True for _ in range(n + 1)]
-
-    num = 2
-    while (num * num) < (n + 1):
-        if divisors[num] is True:
-            for i in range(num * num, n + 1, num):
-                divisors[i] = False
-        num += 1
-
-    # Get the largest prime number which is a divisor of n
-    num = 2
-    while (num * num) < (n + 1):
-        if divisors[num] is True and n % num == 0:
-            largest_divisor = num
-        num += 1
-    return largest_divisor
+    divisor = 1
+    sqrt = int(pow(n, 0.5))
+    # find all the divisors of n from 2 until its square root
+    # first find the smallest divisor of n and use its other divisor
+    # to recursively get a smaller subdvision of it
+    # as a way to minimize the required number of operations needed
+    # while adding up all the divisors
+    for num in range(2, sqrt + 1):
+        if n % num == 0:
+            divisor = n // num
+            return min_divisor(divisor) + num
+    return n
 
 
 def minOperations(n: int) -> int:
@@ -46,7 +38,4 @@ def minOperations(n: int) -> int:
     elif n == 2:
         return 2
     else:
-        p = largest_prime_divisor(n)
-        if p == n:
-            return n
-        return p + (n // p)
+        return min_divisor(n)
