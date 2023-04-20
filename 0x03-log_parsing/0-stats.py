@@ -20,6 +20,7 @@ def print_stats(file_size: int, status_codes: dict) -> None:
     [
         stdout.write("{0}: {1}\n".format(status_code, count))
         for status_code, count in status_codes.items()
+        if count > 0
     ]
 
 
