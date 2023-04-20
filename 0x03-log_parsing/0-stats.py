@@ -9,9 +9,9 @@ _YEAR = r"(20([0-1]\d|2[0-3])"
 _DATE = _YEAR + r"\-(0|1)\d\-[0-3]\d\s+(2[0-3]|1\d|\d)(:[0-5]\d){2}\.\d{6})"
 _STATUS_CODE = r"(200|301|400|401|403|404|405|500)"
 _FILE_SIZE = r"(10([0-2][0-4]|[0-1]\d)|[1-9]\d{1,2}|[1-9])"
-_PROJECT = r"\"GET\s+\/projects\/260\s+HTTP\/1.1\""
+_REQUEST = r"\"GET\s+\/projects\/260\s+HTTP\/1.1\""
 PTTN = r"{0}\s+\-\s+\[{1}\]\s+{2}\s+{3}\s+{4}" \
-    .format(_IP, _DATE, _PROJECT, _STATUS_CODE, _FILE_SIZE)
+    .format(_IP, _DATE, _REQUEST, _STATUS_CODE, _FILE_SIZE)
 
 
 def print_stats(file_size: int, status_codes: dict) -> None:
@@ -36,30 +36,30 @@ if __name__ == "__main__":
         403: 0,
         404: 0,
         405: 0,
-        500: 0}
+        500: 0
+    }
 
     try:
         for stream in stdin:
-            # while True:
             line = str(stream.rstrip())
-            # print(line)
-            if not line:
-                break
-            # print(re.fullmatch(PTTN, line))
-            if re.fullmatch(PTTN, line) is None:
+            if not line or len(list(line.split())) < 2:
                 continue
-            file_size += int(list(line.split())[-1])
-            status_code = int(list(line.split())[-2])
+            try:
+                file_size += int(list(line.split())[-1])
+                status_code = int(list(line.split())[-2])
+            except:
+                continue
             if status_code in status_codes.keys():
                 count = status_codes.get(status_code, 0)
                 count += 1
                 status_codes.update({status_code: count})
             line_count += 1
+            if re.fullmatch(PTTN, line) is None:
+                continue
             if line_count % 10 == 0:
                 print_stats(file_size, status_codes)
     except (KeyboardInterrupt, EOFError):
-        # stdout.write("KeyboardInterrupt | EOFError Error\n")
-        EXIT_CODE = 2
+        EXIT_CODE = 1
     finally:
         print_stats(file_size, status_codes)
         exit(EXIT_CODE)
