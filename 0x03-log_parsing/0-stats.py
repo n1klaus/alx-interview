@@ -18,9 +18,9 @@ def print_stats(file_size: int, status_codes: dict) -> None:
     """Print statistics from provided input arguments"""
     stdout.write("File size: {0}\n".format(file_size))
     [
-        stdout.write("{0}: {1}\n".format(status_code, count))
-        for status_code, count in status_codes.items()
-        if count > 0
+        stdout.write("{0}: {1}\n".format(code, status_codes[code]))
+        for code in sorted(status_codes)
+        if status_codes.get(code, 0) > 0
     ]
 
 
