@@ -44,18 +44,22 @@ if __name__ == "__main__":
             line = str(stream.rstrip())
             if not line or len(list(line.split())) < 2:
                 continue
+            # Get the file size and status code from the line
             try:
                 file_size += int(list(line.split())[-1])
                 status_code = int(list(line.split())[-2])
-            except:
+            except BaseException:
                 continue
+            # If status code is valid update the count
             if status_code in status_codes.keys():
                 count = status_codes.get(status_code, 0)
                 count += 1
                 status_codes.update({status_code: count})
             line_count += 1
+            # Confirm all other requirements are met
             if re.fullmatch(PTTN, line) is None:
                 continue
+            # Print after reading every 10 lines
             if line_count % 10 == 0:
                 print_stats(file_size, status_codes)
     except (KeyboardInterrupt, EOFError):
