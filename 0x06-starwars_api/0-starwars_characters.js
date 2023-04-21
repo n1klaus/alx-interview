@@ -2,50 +2,42 @@
 
 const request = require('request');
 
-const filmUrl = 'https://swapi-api.alx-tools.com/api/films/';
+const URL = 'https://swapi-api.alx-tools.com/api';
 
-try {
-  if (process.argv.length === 3) {
-    const filmId = process.argv[2];
-    if (!isNaN(filmId)) {
-      let characters;
-      request
-        .get(`${filmUrl}${filmId}`)
-        .on('response', function (response) {
-        //   console.log(response.statusCode);
-        //   console.log(response.headers['content-type']);
-          if (response.statusCode === 200) {
-            const respData = response.toJSON();
-            console.log(respData);
-            characters = respData.characters;
-            // console.log(characters);
-            if (characters) {
-              const characterNames = [];
-              characters.forEach(charLink => {
-                let characterResponse;
-                request
-                  .get(`${charLink}`)
-                  .on('response', function (response) {
-                    // console.log(response.statusCode);
-                    // console.log(response.headers['content-type']);
-                    characterResponse = response.toJSON();
-                  })
-                  .on('error', function (err) {
-                    console.error(err);
-                  });
-                characterNames.push(characterResponse.name);
-              });
-              console.log(characterNames.join('\n'));
-            }
-          }
-        })
-        .on('error', function (err) {
-          console.error(err);
+function getCharacters () {
+  if (process.argv.length !== 3) return Promise.reject(new Error());
+  const filmId = process.argv[2];
+  const characterResolver = [];
+  if (isNaN(filmId)) return Promise.reject(new Error());
+  request(`${URL}/films/${filmId}`, function (err, response, body) {
+    if (err) return Promise.reject(err);
+    if (body && response.statusCode === 200) {
+      const info = JSON.parse(body);
+      const characters = info.characters;
+      if (characters) {
+        Array.from(characters).map((charLink) => {
+          let characterName = new Promise((resolve, reject) => {
+            request(`${charLink}`, (err, response, body) => {
+              if (err) return reject(err);
+              if (body && response.statusCode === 200) {
+                const characterResponse = JSON.parse(body);
+                characterName = characterResponse.name;
+                return resolve(characterName);
+              }
+            });
+          });
+          characterResolver.push(characterName);
+          return Promise.resolve(characterName);
         });
+
+        Promise.all(characterResolver)
+          .then((characters) => {
+            for (const character of characters) {
+              console.log(character);
+            }
+          });
+      }
     }
-  }
-} catch (e) {
-  console.error(e);
-} finally {
-  process.exit();
+  });
 }
+getCharacters();
