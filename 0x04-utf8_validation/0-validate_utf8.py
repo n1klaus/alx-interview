@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 """Check UTF-8 validation"""
 
-from typing import Any, List
 
-
-def validUTF8(data: List[Any]) -> bool:
+def validUTF8(data) -> bool:
     """Checks if a given dataset represents a valid UTF-8 encoding"""
     try:
         if not data:
