@@ -12,7 +12,7 @@ You can assume the matrix will have 2 dimensions and will not be empty.
 2. Create a working copy so that i can reference the original
 3. Have row index pointer and column index pointer variables for iterating the matrix
 
-### Brute-Force Procedure - Calculating rotation movement pattern
+### [Brute-Force Procedure - Calculating rotation movement pattern](./_0-rotate_2d_matrix.py)
 - top row moves => right
     - where the right has **column index == len(row) - 1**
     - copying columns from right to left of the current row
@@ -152,7 +152,7 @@ Time Complexity => O(n)
 2. Use xor bit manipluation to swap values in two different locations
 3. Use row index pointer and column index pointer variables for iterating the matrix
 
-### Transposing the matrix then reversing each row
+### [Transposing the matrix then reversing each row](./0-rotate_2d_matrix.py)
 1. Transpose each row r from the first row with column c from the first column in matrix
     - set row_index = 0
     - set col_index = 0
