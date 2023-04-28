@@ -20,15 +20,11 @@ def island_perimeter(grid: list) -> int:
     row_index = 0
     start_col = 0
     total_perimeter = 0
-    at_island_edge = False
 
     # Iterate each row
     while row_index < len(grid):
         # Start from first column, index 0 if not at the island edge
-        if not at_island_edge:
-            col_index = 0
-        # Reset the check
-        at_island_edge = False
+        col_index = 0
 
         # Iterate each column
         while col_index < len(grid[row_index]):
@@ -50,14 +46,12 @@ def island_perimeter(grid: list) -> int:
                         grid[row_index + 1][col_index] == 1:
                     total_perimeter -= 1
                 # if connected to land on right, subtract shared connection
-                if col_index + 1 < len(grid[row_index]) and \
-                        grid[row_index][col_index + 1] == 1:
-                    total_perimeter -= 1
-                else:
-                    # move to the next row to search vertically
-                    at_island_edge = True
-                    col_index = start_col
-                    break
+                if col_index + 1 < len(grid[row_index]):
+                    if grid[row_index][col_index + 1] == 1:
+                        total_perimeter -= 1
+                    else:
+                        # move to the next row to search vertically
+                        break
 
             # Move to the next column
             col_index += 1
