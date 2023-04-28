@@ -12,7 +12,7 @@ def valid_byte(byte, number):
             return False
     elif number == 2:
         # check the 2 bytes ( [110xxxxx 10xxxxxx] 5 bits , 6 bits)
-        if (len(byte) == 8 and byte[0] != "1") \
+        if (len(byte) == 8 and (byte[0] != "1")) \
             or \
             (8 < len(byte) < 16 and (byte[0] != "1" or byte[1] != "1")) \
             or \
@@ -59,19 +59,26 @@ def validUTF8(data):
         return True
 
     for code_point in data:
+        if not code_point:
+            continue
+        
         _binary = bin(code_point).replace("0b", "")
         # uses 1 byte ([0xxxxxxx] 7 bits)
-        if 0x0000 <= code_point <= 0x007F and not valid_byte(_binary, 1):
-            return False
-        # uses 2 bytes ([110xxxxx 10xxxxxx] 5 bits , 6 bits)
-        elif 0x0080 <= code_point <= 0x07FF and not valid_byte(_binary, 2):
-            return False
+        if 0x0000 <= code_point <= 0x007F:
+            if not valid_byte(_binary, 1):
+                return False
+        # uses 2 bytes ( [110xxxxx 10xxxxxx] 5 bits , 6 bits)
+        elif 0x0080 <= code_point <= 0x07FF:
+            if not valid_byte(_binary, 2):
+                return False
         # uses 3 bytes (4 bits, 6 bits, 6 bits)
         # ([1110xxxx 10xxxxxx 10xxxxxx])
-        elif 0x0800 <= code_point <= 0xFFFF and not valid_byte(_binary, 3):
-            return False
+        elif 0x0800 <= code_point <= 0xFFFF:
+            if not valid_byte(_binary, 3):
+                return False
         # uses 4 bytes (3 bits, 6 bits, 6 bits, 6 bits)
         # ([11110xxx 10xxxxxx 10xxxxxx 10xxxxxx])
-        elif 0x10000 <= code_point <= 0x10FFFF and not valid_byte(_binary, 4):
-            return False
+        elif 0x10000 <= code_point <= 0x10FFFF:
+            if not valid_byte(_binary, 4):
+                return False
     return True
