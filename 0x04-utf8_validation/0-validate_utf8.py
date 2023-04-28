@@ -59,9 +59,9 @@ def validUTF8(data):
         return True
 
     for code_point in data:
-        if not code_point:
+        if code_point is None:
             continue
-        
+
         _binary = bin(code_point).replace("0b", "")
         # uses 1 byte ([0xxxxxxx] 7 bits)
         if 0x0000 <= code_point <= 0x007F:
