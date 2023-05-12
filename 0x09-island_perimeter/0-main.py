@@ -12,20 +12,38 @@ if __name__ == "__main__":
         [0, 1, 1, 1, 0, 0],
         [0, 0, 0, 0, 0, 0]
     ]
-    print(island_perimeter(grid))
+    print(island_perimeter(grid)) #12
+    grid = [
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1]
+    ]
+    print(island_perimeter(grid)) # 16
     grid = [
         [0, 0, 0, 0, 0, 0],
         [0, 1, 1, 0, 0, 0],
-        [0, 1, 1, 0, 0, 0],
-        [0, 1, 1, 0, 0, 0],
+        [1, 1, 1, 0, 0, 0],
+        [0, 1, 1, 1, 0, 0],
+        [0, 0, 0, 1, 1, 1]
+    ]
+    print(island_perimeter(grid)) # 20
+    grid = [
+        [0, 1, 0, 0, 0, 1],
+        [1, 1, 0, 0, 0, 1],
+        [1, 1, 0, 1, 1, 1],
+        [0, 1, 1, 1, 0, 0],
+        [0, 0, 1, 1, 0, 0]
+    ]
+    print(island_perimeter(grid)) # 28
+    grid = [
+        [0, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0]
     ]
-    print(island_perimeter(grid))
+    print(island_perimeter(grid)) # 4
     grid = [
         [0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 1, 0, 0],
-        [0, 1, 1, 1, 0, 0],
         [0, 0, 0, 0, 0, 0]
     ]
-    print(island_perimeter(grid))
+    print(island_perimeter(grid)) # 0
