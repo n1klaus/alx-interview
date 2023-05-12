@@ -3,12 +3,12 @@
 
 
 class Cell(object):
-    """Class definition for cells"""
+    """Class definition for a grid land cell"""
     perimeter = 4
     is_land = False
 
     def __init__(self, row_index: int, col_index: int):
-        """Instantiates new cell objects"""
+        """Instantiates a new cell object"""
         self.location = (row_index, col_index)
         self.links = set()
 
@@ -24,40 +24,40 @@ class Cell(object):
 
 
 class Row(object):
-    """Class definition for rows"""
+    """Class definition for a grid row"""
     perimeter = 0
 
     def __init__(self, index: int):
-        """Instantiates new row objects"""
+        """Instantiates a new row object"""
         self.index = index
         self.cells = []
 
     def get_land_cells(self):
-        """Returns only cells with land"""
+        """Returns only land cells in a grid row"""
         return [cell for cell in self.cells if cell.is_land]
 
 
 class Grid(object):
-    """Class definition for grid"""
+    """Class definition for a grid"""
     perimeter = 0
 
     def __init__(self, grid: list):
-        """Instantiates new grid objects"""
+        """Instantiates a new grid object"""
         self.rows = []
-        self.linked_cells = set()
+        self.valid_cells = set()
         self.create_grid(grid)
 
     def create_grid(self, grid: list):
-        """Creates our grid"""
+        """Creates our grid land matrix"""
         if isinstance(grid, list):
             rows = []
             for row_index in range(len(grid)):
                 columns = []
                 for col_index in range(len(grid[row_index])):
                     cell = Cell(row_index, col_index)
-                    # print(repr(cell))
-                    # create links if it a land cell
+                    # create links to other cells if it a land cell
                     if grid[row_index][col_index] == 1:
+                        cell.is_land = True
                         if col_index > 0:
                             # Add link to left cell
                             if grid[row_index][col_index - 1] == 1:
@@ -82,40 +82,57 @@ class Grid(object):
                                 cell.links.add(Cell(row_index + 1, col_index))
                                 # Deduct the perimeter
                                 cell.perimeter -= 1
-                    # Ignore cells with no links
-                    if len(cell.links) > 0:
-                        cell.is_land = True
-                    # print(repr(cell))
                     columns.append(cell)
+                # Create and fill our row with the cells
                 row = Row(row_index)
                 row.cells = columns
                 rows.append(row)
+            # Fill our grid with the rows
             self.rows = rows
 
-    def get_linked_cells(self) -> set:
-        """Returns a set of all linked cells"""
+    def get_valid_cells(self) -> set:
+        """
+        Returns a set of land cells which have a link to other cells
+        otherwise return single cell in a case of a lonely cell
+        """
         if self.rows:
             valid_cells = set()
+            # Add all land cells from each row
             for row in self.rows:
                 valid_cells.update(row.get_land_cells())
-            # Do the pruning
-            valid_locations = set()
-            for cell in valid_cells:
-                valid_locations.update([cell.location for cell in cell.links])
-            for cell in valid_cells:
-                if cell.location in valid_locations:
-                    self.linked_cells.add(cell)
-        return self.linked_cells
 
-    def get_linked_cells_perimeter(self) -> int:
-        """Returns the perimeter of all the linked cells"""
+            # Do the pruning
+            if len(valid_cells) > 1:
+                # Store all locations of linked cells
+                valid_locations = set()
+                # Add land cells which have been linked by other cells
+                for cell in valid_cells:
+                    valid_locations.update(
+                        {cell.location for cell in cell.links})
+
+                # Only add land cells which have been linked to by other cells
+                # in our final set of land cells
+                for cell in valid_cells:
+                    if cell.location in valid_locations:
+                        self.valid_cells.add(cell)
+            else:
+                # No need for pruning
+                new_cell = next(iter(valid_cells), None)
+                self.valid_cells.add(new_cell)
+        return self.valid_cells
+
+    def get_valid_cells_perimeter(self) -> int:
+        """Returns the perimeter of all the valid cells"""
         if self.rows:
-            for cell in self.get_linked_cells():
-                self.perimeter += cell.perimeter
+            # Get all valid land cells
+            for cell in self.get_valid_cells():
+                if cell:
+                    # Add their perimeter
+                    self.perimeter += cell.perimeter
         return self.perimeter
 
     def __str__(self):
-        """Overrides the default string representation of the object"""
+        """Returns the default string representation of the object"""
         result = ""
         for row in self.rows:
             result += "["
@@ -133,7 +150,7 @@ def island_perimeter(grid: list) -> int:
     Returns:
         (int): The total perimeter of the island
     """
-    # check if our argument is undefined
+    # validate our arguments
     if not isinstance(grid, list) or \
         not all(list(map(lambda x: True if isinstance(x, list)
                          else False, grid))):
@@ -142,6 +159,5 @@ def island_perimeter(grid: list) -> int:
     # create a new grid
     my_grid = Grid(grid)
 
-    print(my_grid)
-    # Get all linked cells and calculate the perimeter
-    return my_grid.get_linked_cells_perimeter()
+    # Get all valid land cells and calculate the perimeter
+    return my_grid.get_valid_cells_perimeter()
